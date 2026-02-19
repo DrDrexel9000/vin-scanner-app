@@ -34,19 +34,8 @@
         "WRITE_EXTERNAL_STORAGE"
       ]
     },
-    "web": {
-      "favicon": "./assets/favicon.png"
-    },
-    "plugins": [
-      [
-        "react-native-vision-camera",
-        {
-          "cameraPermissionText": "$(PRODUCT_NAME) needs access to your Camera to scan VIN numbers.",
-          "enableMicrophonePermission": false,
-          "microphonePermissionText": "$(PRODUCT_NAME) needs access to your Microphone."
-        }
-      ]
-    ],
+    "web": {},
+    "plugins": [],
     "extra": {
       "eas": {
         "projectId": "your-project-id-here"
