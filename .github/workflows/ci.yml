@@ -1,0 +1,95 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Setup Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '18'
+        cache: 'npm'
+    
+    - name: Install dependencies
+      run: npm ci
+    
+    - name: Check package.json
+      run: |
+        if [ ! -f "package.json" ]; then
+          echo "❌ package.json missing"
+          exit 1
+        fi
+        
+        # Check for required dependencies
+        REQUIRED_DEPS=("expo" "react" "react-native" "react-native-paper" "@react-navigation/native" "zustand" "axios")
+        for dep in "${REQUIRED_DEPS[@]}"; do
+          if ! grep -q "\"$dep\"" package.json; then
+            echo "❌ Missing dependency: $dep"
+            exit 1
+          fi
+        done
+        
+        echo "✅ All required dependencies found"
+    
+    - name: Check file structure
+      run: |
+        REQUIRED_FILES=(
+          "App.js"
+          "package.json"
+          "babel.config.js"
+          "app.json"
+          "src/theme/index.js"
+          "src/store/useStore.js"
+          "src/services/vinService.js"
+          "src/screens/HomeScreen.js"
+          "src/screens/VehicleDetailsScreen.js"
+          "src/screens/HistoryScreen.js"
+          "src/screens/SettingsScreen.js"
+        )
+        
+        for file in "${REQUIRED_FILES[@]}"; do
+          if [ ! -f "$file" ]; then
+            echo "❌ Missing file: $file"
+            exit 1
+          fi
+        done
+        
+        echo "✅ All required files present"
+    
+    - name: Lint check
+      run: |
+        # Check for common React Native issues
+        if grep -r "console.log" src/ --include="*.js" | head -5; then
+          echo "⚠️  Found console.log statements in source files"
+        fi
+        
+        # Check for proper imports
+        if ! grep -q "import React" src/screens/HomeScreen.js; then
+          echo "❌ HomeScreen missing React import"
+          exit 1
+        fi
+        
+        echo "✅ Basic lint checks passed"
+    
+    - name: Build check
+      run: |
+        # Try to parse App.js for syntax errors
+        node -c App.js
+        echo "✅ App.js syntax is valid"
+        
+        # Check if babel config exists
+        if [ -f "babel.config.js" ]; then
+          echo "✅ babel.config.js exists"
+        else
+          echo "❌ babel.config.js missing"
+          exit 1
+        fi
