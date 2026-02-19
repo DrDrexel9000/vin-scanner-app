@@ -1,0 +1,54 @@
+# OS
+.DS_Store
+*.log
+
+# Node
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Expo
+.expo/
+.expo-shared/
+
+# Android
+android/.gradle
+android/.idea
+android/build/
+android/local.properties
+android/captures/
+android/*.hprof
+android/.DS_Store
+
+# iOS
+ios/build/
+ios/Pods/
+ios/*.xcworkspace
+ios/.DS_Store
+
+# Babel
+*.jsbundle
+
+# Coverage
+coverage/
+
+# Environment
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Test files
+test-structure.js
